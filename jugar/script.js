@@ -6,11 +6,15 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
+const resources = "https://thmrcode.github.io/Blocks-Game/resources/blocks.json";
+const bg_color = "#000"; const line_color = "#fff";
 
-
-// Event Listeners
-//startButton.addEventListener('click', startGame);
-//resetButton.addEventListener('click', resetGame);
+class Box {
+    constructor(id_, color_) {
+        this.id = id_;
+        this.color = color_;
+    }
+}
 
 class Grid {
     constructor() {
@@ -19,35 +23,60 @@ class Grid {
         this.box_h = 20;   this.box_w = 20;
         this.grid_h = 24; this.grid_w = 15;
         this.grid = new Array(this.grid_h);
-        for (let i = 0; i < this.grid_h; i++) { this.grid[i] = new Array(this.grid_w).fill(0); }
+        for (let i = 0; i < this.grid_h; i++) { this.grid[i] = new Array(this.grid_w).fill(new Box(0,"000")); }
         this.grid_move = new Array(this.grid_h);
-        for (let i = 0; i < this.grid_h; i++) { this.grid_move[i] = new Array(this.grid_w).fill(0); }
+        for (let i = 0; i < this.grid_h; i++) { this.grid_move[i] = new Array(this.grid_w).fill(new Box(0,"000")); }
     }
     draw(i,j,color) {
+        let y = (i - 4)*this.box_h;
+        let x = j*this.box_w;
         ctx.fillStyle = color;
-        let x = (i - 4)*this.box_h;
-        let y = j*this.box_w;
-        ctx.lineWidth = 1;
-        ctx.fillStyle = "#fff";
-        ctx.strokeRect()
-        ctx.fillStyle = color;
-        ctx.fillRect(x,y,this.box_w,this.box_h);
+        ctx.lineWidth = 1;  ctx.strokeStyle = line_color;
+        ctx.strokeRect(x,y,this.box_w,this.box_h);
+    }
+    clear(i,j) {
+        this.draw(i,j,bg_color);
+    }
+    drawAll() {
+        for (let i = 0; i < this.grid_h; i++) {
+            for (let j = 0; j < this.grid_w; j++) {
+                if(this.grid[i][j].id != 0) this.draw(i,j,this.grid[i][j].color);
+            }
+        }
+    }
+    clearAll() {
+        for (let i = 0; i < this.grid_h; i++) {
+            for (let j = 0; j < this.grid_w; j++) {
+                this.clear(i,j);
+            }
+        }
     }
 }
 
 class Game {
     constructor() {
         this.grid_controler = new Grid();
-        fetch("file:///C:/misa/codejs/Blocks-Game/resources/blocks.json")
+        fetch(resources)
         .then(response => { if(!response.ok) throw new Error("Error Blocks"); return response.json();})
         .then(data => {this.images = data})
         this.colors = ['#FF4500', '#00FF00', '#1E90FF', '#FFD700', '#FF69B4'];
-        this.objects_sand = [];
-        this.sand_count = 0;
         this.objects_id = [0];
         this.objects_count = 1;
     }
+    create() {
+        this.grid_controler.clearAll();
+    }
+    
 }
+
+// Event Listeners
+let game = new Game();
+
+startButton.addEventListener('click', () => {game.grid_controler.clearAll();});
+//resetButton.addEventListener('click', resetGame);
+
+
+
 // Para un tablero de 400 por 300, cuadraditos de 20
 class Tablero{
     constructor(){
