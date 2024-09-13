@@ -1,24 +1,53 @@
-// Referencias
+// Referencia
+// Recuerda, la ejecucion de una funcion asincrona es hacer su parte sincrona y añadir su parte asincrona como una microtarea a la cola una vez añadida, termina su ejecucion
+// Recuerda, cuando se termina una promesa, la ultima linea de esta es añadir su then o catch a la cola de microtareass
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
 
-// Recuerda, la ejecucion de una funcion asincrona es hacer su parte sincrona y añadir su parte asincrona como una microtarea a la cola una vez añadida, termina su ejecucion
-// Recuerda, cuando se termina una promesa, la ultima linea de esta es añadir su then o catch a la cola de microtareas
-
-function startGame() {
-    console.log("Juego Iniciado");
-}
-
-function resetGame() {
-    console.log("Juego Reiniciado");
-}
 
 // Event Listeners
-startButton.addEventListener('click', startGame);
-resetButton.addEventListener('click', resetGame);
+//startButton.addEventListener('click', startGame);
+//resetButton.addEventListener('click', resetGame);
 
+class Grid {
+    constructor() {
+        ctx.fillStyle = '#FF4500';
+        this.h = 400;  this.w = 300;
+        this.box_h = 20;   this.box_w = 20;
+        this.grid_h = 24; this.grid_w = 15;
+        this.grid = new Array(this.grid_h);
+        for (let i = 0; i < this.grid_h; i++) { this.grid[i] = new Array(this.grid_w).fill(0); }
+        this.grid_move = new Array(this.grid_h);
+        for (let i = 0; i < this.grid_h; i++) { this.grid_move[i] = new Array(this.grid_w).fill(0); }
+    }
+    draw(i,j,color) {
+        ctx.fillStyle = color;
+        let x = (i - 4)*this.box_h;
+        let y = j*this.box_w;
+        ctx.lineWidth = 1;
+        ctx.fillStyle = "#fff";
+        ctx.strokeRect()
+        ctx.fillStyle = color;
+        ctx.fillRect(x,y,this.box_w,this.box_h);
+    }
+}
+
+class Game {
+    constructor() {
+        this.grid_controler = new Grid();
+        fetch("file:///C:/misa/codejs/Blocks-Game/resources/blocks.json")
+        .then(response => { if(!response.ok) throw new Error("Error Blocks"); return response.json();})
+        .then(data => {this.images = data})
+        this.colors = ['#FF4500', '#00FF00', '#1E90FF', '#FFD700', '#FF69B4'];
+        this.objects_sand = [];
+        this.sand_count = 0;
+        this.objects_id = [0];
+        this.objects_count = 1;
+    }
+}
 // Para un tablero de 400 por 300, cuadraditos de 20
 class Tablero{
     constructor(){
@@ -52,18 +81,6 @@ class Tablero{
         this.sand_count = 0;
         this.objects_id = [0];
         this.objects_count = 1;
-        
-        fetch("https://thmrcode.github.io/Blocks-Game/resources/blocks.json")
-            .then(response => {
-                if(!response.ok) throw new Error("Error al cargar bloques");
-                return response.json();
-            })
-            .then(data => {
-                this.images
-            })
-            .catch(err => {
-            console.log(err)
-            })
     }
     create(){
         this.filas_columnas[0] = [];
