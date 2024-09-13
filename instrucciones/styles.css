@@ -1,0 +1,40 @@
+/* © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados. */
+
+/* Main */
+.main {
+    margin-top: 80px;
+    text-align: center;
+    padding: 0 20px;
+    max-width: 600px; /* Limita el ancho de la sección principal */
+    margin: 80px auto; /* Centra la sección principal horizontalmente */
+}
+
+.main h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    cursor:auto;
+}
+
+.main p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Lista de Instrucciones */
+.instructions-list {
+    list-style: none;
+    padding: 0;
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.instructions-list li {
+    margin-bottom: 15px;
+    background-color: #444;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #555; /* Añade un borde para mayor definición */
+    cursor: pointer;
+}

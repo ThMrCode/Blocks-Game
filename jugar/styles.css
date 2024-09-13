@@ -1,0 +1,102 @@
+/* Main */
+.main {
+    margin-top: 0;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* Diseño del Juego */
+.game-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: 12px;
+    height: 424px;
+    gap: 20px;
+}
+
+/* Contenedor del Juego */
+.game-container {
+    background-color: #222;
+    border: 2px solid #f0f;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Canvas del Juego */
+#gameCanvas {
+    background-color: #000;
+    border: 2px solid #f0f;
+    height: 100%;
+    width: 300px;
+}
+
+/* Columna Derecha: Barra de Puntuación y Controles */
+.score-controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    background-color: #222;
+    border: 2px solid #f0f;
+    border-radius: 8px;
+    padding: 20px;
+    width: 200px;
+    height: 100%;
+}
+
+/* Barra de Puntuación */
+.score-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    width: 100%;
+}
+
+.score-item {
+    text-align: center;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive; /* Fuente estilo arcade */
+}
+
+.score-item h2 {
+    font-size: 14px;
+    margin: 0;
+}
+
+.score-item p {
+    font-size: 20px;
+    margin: 5px 0 0;
+}
+
+/* Botones de Control */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.controls button {
+    padding: 8px 0;
+    font-size: 14px;
+    background-color: #f0f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.controls button:hover {
+    background-color: #ff00ff99;
+}

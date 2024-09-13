@@ -1,0 +1,63 @@
+/* © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados. */
+
+/* Reset*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos Body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Header */
+.header {
+    width: 100%;
+    padding: 20px;
+    background-color: #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f0f;
+    text-decoration: none;
+}
+
+.nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: #f0f;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    padding: 10px;
+    background-color: #222;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugar - Blocks Game</title>
+    <link rel="stylesheet" href="../resources/styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <a href="../inicio/index.html" class="logo">BLOCKS</a>
+        <nav class="nav">
+            <a href="../inicio/index.html">Inicio</a>
+            <a href="../instrucciones/index.html">Instrucciones</a>
+            <a href="../puntuaciones/index.html">Puntuaciones</a>
+            <a href="../contacto/index.html">Contacto</a>
+        </nav>
+    </header>
+
+    <!-- Sección Principal -->
+    <main class="main">
+        <h1>Jugar</h1>
+        <div class="game-layout">
+            <!-- Columna Izquierda: Contenedor del Juego -->
+            <div class="game-container">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+
+            <!-- Columna Derecha: Barra de Puntuación y Controles -->
+            <div class="score-controls">
+                <div class="score-bar">
+                    <div class="score-item">
+                        <h2>Puntuación</h2>
+                        <p id="score">0</p>
+                    </div>
+                    <div class="score-item">
+                        <h2>Nivel</h2>
+                        <p id="level">1</p>
+                    </div>
+                    <div class="score-item">
+                        <h2>Líneas</h2>
+                        <p id="lines">0</p>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button id="startButton">Iniciar Juego</button>
+                    <button id="resetButton">Reiniciar Juego</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de Página -->
+    <footer class="footer">
+        <p>&copy; 2024 Blocks Game. ThMrCode.</p>
+    </footer>
+
+    <!-- Scripts del Juego -->
+    <script src="script.js"></script>
+</body>
+</html>

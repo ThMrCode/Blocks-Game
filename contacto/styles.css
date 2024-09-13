@@ -1,0 +1,95 @@
+/* © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados. */
+
+/* Main */
+.main {
+    margin-top: 30px;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* Contenedor de "Contacto" */
+.about-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #222;
+}
+
+.profile-pic-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid #f0f;
+}
+
+.about-text {
+    flex: 2;
+    padding: 10px;
+    text-align: justify;
+}
+
+.about-text h2 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.about-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.additional-text {
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 20px;
+    padding-bottom: 10px;
+    background-color: #222;
+    text-align: justify;
+}
+
+.additional-info {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.social-links {
+    list-style: none;
+    padding: 0;
+}
+
+.social-links li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.social-links a {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #f0f;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.social-links a:hover {
+    background-color: #ff00ff99;
+    transform: scale(1.05);
+}
