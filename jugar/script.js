@@ -53,7 +53,7 @@ class Tablero{
         this.objects_id = [0];
         this.objects_count = 1;
         
-        fetch("https://thmrcode.github.io/Server/blocks-game/blocks.json")
+        fetch("https://thmrcode.github.io/Blocks-Game/resources/blocks.json")
             .then(response => {
                 if(!response.ok) throw new Error("Error al cargar bloques");
                 return response.json();
