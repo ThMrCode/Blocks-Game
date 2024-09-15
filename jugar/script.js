@@ -9,10 +9,23 @@ const resetButton = document.getElementById('resetButton');
 const resources = "https://thmrcode.github.io/Blocks-Game/resources/blocks.json";
 const bg_color = "#000"; const line_color = "#fff";
 
+// Conjunto controlador de datos -> conjunto de imagenes vivas () incluido su caracter sand
+// Conjunto grid -> 
 class Box {
     constructor(id_, color_) {
         this.id = id_;
         this.color = color_;
+    }
+}
+class Image {
+    constructor(type_,rotate_,color_,x_,y_,id_) {
+        this.type = type_;
+        this.rotate = rotate_;
+        this.color = color_;
+        this.x = x_;
+        this.y = y_;
+        this.id = id_;
+        this.sand = false;
     }
 }
 
@@ -65,6 +78,13 @@ class Game {
     }
     create() {
         this.grid_controler.clearAll();
+    }
+    spawn_img() {
+
+        this.image_type = Math.floor(Math.random()*5);
+        this.image_rotate = Math.floor(Math.random()*4);
+        this.image_pot_x = Math.floor(Math.random()*13);
+        this.image_pot_y = 0;
     }
     
 }
