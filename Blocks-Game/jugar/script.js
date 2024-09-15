@@ -10,7 +10,7 @@ class Data {
         this.resources = "https://thmrcode.com/Blocks-Game/resources/blocks.json";
         fetch(this.resources)
         .then(response => { if(!response.ok) throw new Error("Error Blocks"); return response.json();})
-        .then(data => {this.images = data})
+        .then(data => {this.images = data.images})
         this.colors = ['#FF4500', '#00FF00', '#1E90FF', '#FFD700', '#FF69B4'];
         this.n_color = this.colors.length; this.n_type = 5; this.n_rotate = 4;
         this.bg_color = "#000"; this.line_color = "#fff";
@@ -39,11 +39,19 @@ class Img {
     }
 }
 class Utils {
-    static is_in_range(num,min,max) {
+    static verify_range(num,min,max) {
+        // Verifica si un numero se encuentra en un rango (inclusivo)
         if(num > max || num < min) return false;
         else return true;
     }
-    static spawn_img(id_, grid_) {
+    static index(element,array) {
+        // Verifica si un pot se encuentra en un array y devuelve su posicion
+        for (let i = 0; i < array.length; i++) {
+            if(element.x == array[i].x && element.y == array[i].y) return i;
+        }
+        return -1;
+    }
+    static spawn_img(id, grid) {
         let img_type = Math.floor(Math.random()*data.n_type);
         let img_rotate = Math.floor(Math.random()*data.n_rotate);
         let img_color = data.colors[Math.floor(Math.random()*data.n_color)];
@@ -51,21 +59,24 @@ class Utils {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 if(data.images[img_type][img_rotate][i][j] == 1) {
-                    grid_[i][img_x + j] = new Box(id_,img_color);
+                    grid[i][img_x + j] = new Box(id,img_color);
                 }
             }
         }
-        return new Img(img_x,0,data.images[img_type][img_rotate],id_);
+        return new Img(img_x,0,data.images[img_type][img_rotate],id);
     }
-    static move_img(img, grid, dx, dy) {
+    static verify_move_img(img, grid, dx, dy) {
+        // Funcion que se encarga de ver si una imagen (solida) puede moverse 
+        // (segun limites del mapa y no chocar con otros bloques que lo impidan)
+        // Devuelve el valor de si puede moverse o no
         let move = true;
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 if(img.shape[i][j] == 1) {
                     let new_y = img.y + i + dy;
                     let new_x = img.x + j + dx;
-                    if(this.is_in_range(new_x,0,(data.grid_w-1)) && this.is_in_range(new_y,0,(data.grid_h-1))) {
-                        if(grid[new_y][new_x].id != 0) {
+                    if(this.verify_range(new_x,0,(data.grid_w-1)) && this.verify_range(new_y,0,(data.grid_h-1))) {
+                        if(grid[new_y][new_x].id != 0 && grid[new_y][new_x].id != img.id) {
                             move = false;
                             break;
                         }
@@ -77,23 +88,35 @@ class Utils {
                 }
             }
         }
-        if(move) {
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 4; j++) {
-                    if(img.shape[i][j] == 1) {
-                        let last_y = img.y + i;
-                        let last_x = img.x + j;
-                        let new_y = last_y + dy;
-                        let new_x = last_x + dx;
-                        grid[new_y][new_x] = grid[last_y][last_x];
-                        grid[last_y][last_x] = new Box(0,data.bg_color);
+        return move;
+    }
+    static move_img(img, grid, dx, dy) {
+        let pots = [];
+        let pots_delete = [];
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                if(img.shape[i][j] == 1) {
+                    pots.push({ y: (img.y + i + dy), x: (img.x + j + dx)});
+                }
+            }
+        }
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                if(img.shape[i][j] == 1) {
+                    let pot = {y: (img.y + i),x: (img.x + j)};
+                    let index = this.index(pot,pots);
+                    if(index != -1) {
+                        pots_delete.push(pot);
+                        pots.pop(index);
                     }
                 }
             }
-            img.x += dx;
-            img.y += dy;
         }
-        return move;
+        for (let i = 0; i < pots.length; i++) {
+            grid[pots[i].y][pots[i].x] = new Box(img.id,)
+        }
+        img.x = img.x + dx;
+        img.y = img.y + dy;
     }
     static move_sands(grid) {
         for (let i = (data.grid_h-2); i >= 0; i--) {
@@ -111,15 +134,12 @@ class Grid {
     constructor() {
         this.grid = new Array(data.grid_h);
         for (let i = 0; i < data.grid_h; i++) { this.grid[i] = new Array(data.grid_w).fill(new Box(0,data.bg_color)); }
-        /*
-        this.grid_base = new Array(data.grid_h);
-        for (let i = 0; i < data.grid_h; i++) { this.grid_base[i] = new Array(data.grid_w).fill(new Box(0,data.bg_color)); }*/
     }
     draw(i,j,color) {
         let y = (i - 4)*data.box_h;
         let x = j*data.box_w;
         ctx.fillStyle = color;
-        ctx.lineWidth = 1;  ctx.strokeStyle = line_color;
+        ctx.lineWidth = 1;  ctx.strokeStyle = data.line_color;
         ctx.strokeRect(x,y,data.box_w,data.box_h);
     }
     clear(i,j) {
@@ -148,22 +168,43 @@ class Game {
         // Primero hacer caer los sands y luego los images
         this.imageStop = true;
         this.images = [];
-        this.counter = 0;
+        this.counter = 1;
+        this.life = true;
+    }
+    reset() {
+        game.grid_controler.clearAll();
+        this.imageStop = true;
+        this.images = [];
+        this.counter = 1;
         this.life = true;
     }
     loop() {
-        this.grid_controler.clearAll();
+        //this.grid_controler.clearAll();
         if(this.imageStop) {
             this.images.push(Utils.spawn_img(this.counter,this.grid_controler.grid));
+            this.imageStop = false;
         }
-        this.counter++;
-        
+        //Utils.move_sands(this.grid_controler.grid);
+        console.log(this.grid_controler.grid);
+        for (let i = 0; i < this.images.length; i++) {
+            //console.log(this.images[i].y);
+            console.log(Utils.move_img(this.images[i],this.grid_controler.grid,0,1));
+        }
+        //this.grid_controler.drawAll();
+        this.counter++;     
     }
     
 }
 
 // Event Listeners
 let game = new Game();
-
-startButton.addEventListener('click', () => {game.grid_controler.clearAll();});
+let loop = 0; let speed = 100;
+game.reset();
+startButton.addEventListener('click', () => {
+    game.loop();
+    /*
+    loop = setInterval(() => {
+        game.loop();
+    }, speed);*/
+});
 //resetButton.addEventListener('click', resetGame);
