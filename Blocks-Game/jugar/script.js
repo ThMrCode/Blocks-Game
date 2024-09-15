@@ -6,7 +6,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
-const resources = "https://thmrcode.github.io/Blocks-Game/resources/blocks.json";
+const resources = "https://thmrcode.com/Blocks-Game/resources/blocks.json";
 const bg_color = "#000"; const line_color = "#fff";
 
 // Conjunto controlador de datos -> conjunto de imagenes vivas () incluido su caracter sand
