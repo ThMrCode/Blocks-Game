@@ -20,3 +20,44 @@ export class Img {
         this.sand = false;
     }
 }
+
+export class Grid {
+    constructor(data_) {
+        this.grid = new Array(this.data.grid_h);
+        for (let i = 0; i < this.data.grid_h; i++) { 
+            this.grid[i] = new Array(this.data.grid_w).fill(new Box(0,this.data.bg_color)); 
+        }
+        this.data = data_;
+    }
+    reset() {
+        this.grid = new Array(this.data.grid_h);
+        for (let i = 0; i < this.data.grid_h; i++) { 
+            this.grid[i] = new Array(this.data.grid_w).fill(new Box(0,this.data.bg_color)); 
+        }
+    }
+    draw(i,j,color) {
+        let y = (i - 4)*this.data.box_h;
+        let x = j*this.data.box_w;
+        ctx.fillStyle = color;
+        ctx.fillRect(x,y,this.data.box_w,this.data.box_h);
+    }
+    clear(i,j) {
+        this.draw(i,j,this.data.bg_color);
+    }
+    drawAll() {
+        for (let i = 0; i < this.data.grid_h; i++) {
+            for (let j = 0; j < this.data.grid_w; j++) {
+                if(this.grid[i][j].id != 0) {
+                    this.draw(i,j,this.grid[i][j].color);
+                }
+            }
+        }
+    }
+    clearAll() {
+        for (let i = 0; i < this.data.grid_h; i++) {
+            for (let j = 0; j < this.data.grid_w; j++) {
+                this.clear(i,j);
+            }
+        }
+    }
+}

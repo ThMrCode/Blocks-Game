@@ -1,11 +1,11 @@
 // © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados.
-import {Box,Img} from "./graphics.js"
-import { Data } from "./data.js" 
+import { Box, Img, Grid } from "./graphics.js"
+import { Data, newData } from "./data.js" 
 const ctx = document.getElementById('gameCanvas').getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
 const sound = new Audio("../resources/sound.mp3"); sound.loop=true;
-const data = new Data("../resources/blocks.json");
+const data = newData("../resources/blocks.json");
 
 class Utils {
     static verify_range(num,min,max) {
@@ -182,46 +182,9 @@ class Utils {
     }
 }
 
-class Grid {
-    constructor() {
-        this.reset();
-    }
-    reset() {
-        this.grid = new Array(data.grid_h);
-        for (let i = 0; i < data.grid_h; i++) { 
-            this.grid[i] = new Array(data.grid_w).fill(new Box(0,data.bg_color)); 
-        }
-    }
-    draw(i,j,color) {
-        let y = (i - 4)*data.box_h;
-        let x = j*data.box_w;
-        ctx.fillStyle = color;
-        ctx.fillRect(x,y,data.box_w,data.box_h);
-    }
-    clear(i,j) {
-        this.draw(i,j,data.bg_color);
-    }
-    drawAll() {
-        for (let i = 0; i < data.grid_h; i++) {
-            for (let j = 0; j < data.grid_w; j++) {
-                if(this.grid[i][j].id != 0) {
-                    this.draw(i,j,this.grid[i][j].color);
-                }
-            }
-        }
-    }
-    clearAll() {
-        for (let i = 0; i < data.grid_h; i++) {
-            for (let j = 0; j < data.grid_w; j++) {
-                this.clear(i,j);
-            }
-        }
-    }
-}
-
 class Game {
     constructor() {
-        this.grid_controler = new Grid();
+        this.grid_controler = new Grid(data);
         this.imageStop = true;
         this.images = [];
         this.counter = 1;
