@@ -8,6 +8,8 @@ export class Data {
             this.images = data.images;
             this.colors = data.colors;
         })
+        console.log(this.colors);
+        console.log(this.images);
         this.n_color = this.colors.length; 
         this.n_type = this.images.length; 
         this.n_rotate = this.images[0].length;
