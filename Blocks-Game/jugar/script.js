@@ -6,6 +6,7 @@ const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
 const sound = new Audio("../resources/sound.mp3"); sound.loop=true;
 const data = new Data("../resources/blocks.json");
+console.log(data.n_type);
 
 class Utils {
     static verify_range(num,min,max) {
