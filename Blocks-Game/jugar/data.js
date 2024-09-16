@@ -1,9 +1,8 @@
 // © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados.
 
 export class Data {
-    constructor() {
-        this.resources = "https://thmrcode.com/Blocks-Game/resources/blocks.json";
-        fetch(this.resources)
+    constructor(resources) {
+        fetch(resources)
         .then(response => { if(!response.ok) throw new Error("Error Blocks"); return response.json();})
         .then(data => {this.images = data.images})
         this.colors = ['#FF4500', '#00FF00', '#1E90FF', '#FFD700', '#FF69B4'];

@@ -1,12 +1,11 @@
 // © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados.
-
 import {Box,Img} from "./graphics.js"
-import { Data } from "https://thmrcode.com/Blocks-Game/jugar/data.js" 
+import { Data } from "./data.js" 
 const ctx = document.getElementById('gameCanvas').getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
 const sound = new Audio("../resources/sound.mp3"); sound.loop=true;
-const data = new Data();
+const data = new Data("../resources/blocks.json");
 
 class Utils {
     static verify_range(num,min,max) {
