@@ -6,7 +6,6 @@ const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
 const sound = new Audio("../resources/sound.mp3"); sound.loop=true;
 const data = new Data("../resources/blocks.json");
-console.log(data.n_type);
 
 class Utils {
     static verify_range(num,min,max) {
@@ -185,12 +184,13 @@ class Utils {
 
 class Grid {
     constructor() {
-        this.grid = new Array(data.grid_h);
-        for (let i = 0; i < data.grid_h; i++) { this.grid[i] = new Array(data.grid_w).fill(new Box(0,data.bg_color)); }
+        this.reset();
     }
     reset() {
         this.grid = new Array(data.grid_h);
-        for (let i = 0; i < data.grid_h; i++) { this.grid[i] = new Array(data.grid_w).fill(new Box(0,data.bg_color)); }
+        for (let i = 0; i < data.grid_h; i++) { 
+            this.grid[i] = new Array(data.grid_w).fill(new Box(0,data.bg_color)); 
+        }
     }
     draw(i,j,color) {
         let y = (i - 4)*data.box_h;
