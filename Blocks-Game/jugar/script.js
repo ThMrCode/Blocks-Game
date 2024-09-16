@@ -1,48 +1,12 @@
 // © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados.
-
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+import {Box,Img} from "./graphics.js"
+import { Data } from "./data.js" 
+const ctx = document.getElementById('gameCanvas').getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
-const sound = new Audio("../resources/sound.mp3");
-sound.loop=true;
-
-class Data {
-    constructor() {
-        this.resources = "https://thmrcode.com/Blocks-Game/resources/blocks.json";
-        fetch(this.resources)
-        .then(response => { if(!response.ok) throw new Error("Error Blocks"); return response.json();})
-        .then(data => {this.images = data.images})
-        this.colors = ['#FF4500', '#00FF00', '#1E90FF', '#FFD700', '#FF69B4'];
-        this.n_color = this.colors.length; this.n_type = 5; this.n_rotate = 4;
-        this.bg_color = "#000"; this.line_color = "#fff";
-        this.h = 400;  this.w = 300;
-        this.box_h = 20;   this.box_w = 20;
-        this.grid_h = 24; this.grid_w = 15;
-    }
-}
-
+const sound = new Audio("../resources/sound.mp3"); sound.loop=true;
 const data = new Data();
 
-class Box {
-    constructor(id_, color_) {
-        this.id = id_;
-        this.color = color_;
-        this.sand = false;
-    }
-}
-class Img {
-    constructor(x_,y_,shape_,id_, color_, type_, rotate_) {
-        this.x = x_;
-        this.y = y_;
-        this.shape = shape_;
-        this.id = id_;
-        this.color = color_;
-        this.type = type_;
-        this.rotate = rotate_;
-        this.sand = false;
-    }
-}
 class Utils {
     static verify_range(num,min,max) {
         // Verifica si un numero se encuentra en un rango (inclusivo)
@@ -55,6 +19,9 @@ class Utils {
             if(element.x == array[i].x && element.y == array[i].y) return i;
         }
         return -1;
+    }
+    static pop_mul(pots,array) {
+        // Metodo que elimina varios elementos de un array segun su posicion
     }
     static spawn_img(id, grid) {
         // Spawnea una imagen aleatoria de las opciones en data, (type, rotate, color)
