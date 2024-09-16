@@ -1,6 +1,7 @@
 // © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados.
+
 import {Box,Img} from "./graphics.js"
-import { Data } from "./data.js" 
+import { Data } from "https://thmrcode.com/Blocks-Game/jugar/data.js" 
 const ctx = document.getElementById('gameCanvas').getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
