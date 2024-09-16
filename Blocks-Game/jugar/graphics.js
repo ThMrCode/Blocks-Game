@@ -23,11 +23,11 @@ export class Img {
 
 export class Grid {
     constructor(data_) {
+        this.data = data_;
         this.grid = new Array(this.data.grid_h);
         for (let i = 0; i < this.data.grid_h; i++) { 
             this.grid[i] = new Array(this.data.grid_w).fill(new Box(0,this.data.bg_color)); 
         }
-        this.data = data_;
     }
     reset() {
         this.grid = new Array(this.data.grid_h);
