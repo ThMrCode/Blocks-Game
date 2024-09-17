@@ -14,8 +14,8 @@ export class Utils {
         }
         return -1;
     }
-    static pop_mul(pots,array) {
-        // Metodo que elimina varios elementos de un array segun su posicion
+    static pop_mul(ids,array) {
+        // Metodo que elimina varios elementos de un array segun su id
     }
 }
 
@@ -184,23 +184,50 @@ export class Logic {
 
     pop_row(i) {
         let grid = this.grid_controler.grid;
+        let ids = new Set();
         for (let j = 0; j < this.data.grid_w; j++) {
             // Actualizar id sans de todos los cuadrados y de las imagenes
-            grid[i][j].id
+            ids.add(grid[i][j].id);
             grid[i][j] = new Box(0,this.data.bg_color);
+        }
+        return ids;
+    }
+
+    acctually_sands(ids) {
+        // Funcion que Actualiza los sands de Boxs
+        let grid = this.grid_controler.grid;
+        for (let i = 0; i < this.data.grid_h; i++) {
+            for (let j = 0; j < this.data.grid_w; j++) {
+                if(ids.has(grid[i][j].id)) grid[i][j].sand = true;
+            }
         }
     }
 
-    verify_row() {
+    verify_rows() {
+        // Funcion que verifica si las rows se pueden eliminar 
+        // devuelve array de las rows que se pueden eliminar, y el score obtenido 
         let grid = this.grid_controler.grid;
-        let same_color = true;
+        let rows_delete = [];
+        let score_ = 0;
         for (let i = (this.data.grid_h-1); i >= 0; i--) {
+            let value_row = true;
+            let same_color = true;
             for (let j = 0; j < this.data.grid_w; j++) {
                 if(grid[i][j].id != 0) {
-                    this.draw(i,j,grid[i][j].color);
+                    if(grid[i][j].color != grid[i][0].color) same_color = false;
+                }
+                else {
+                    value_row = false;
+                    break;
                 }
             }
-        }
+            if(value_row) {
+                rows_delete.push(i);
+                if(same_color) score_ += 50;
+                else score_ += 20;
+            }
+        } 
+        return {rows:rows_delete, score:score_};
     }
     
 }

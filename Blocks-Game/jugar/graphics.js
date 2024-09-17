@@ -17,7 +17,6 @@ export class Img {
         this.color = color_;
         this.type = type_;
         this.rotate = rotate_;
-        this.sand = false;
     }
 }
 
