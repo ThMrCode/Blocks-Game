@@ -13,9 +13,3 @@ export class Data {
         this.grid_h = 24; this.grid_w = 15;
     }
 }
-
-export async function newData(resources) {
-    let response = await fetch(resources);
-    let json = await response.json();
-    return new Data(json);
-}
