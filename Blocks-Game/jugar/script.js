@@ -1,4 +1,5 @@
 // © 2024 ThMrCode (Misael Fernández Prada). Todos los derechos reservados.
+
 import { Data } from "./data.js" 
 import { Box, Img, Grid } from "./graphics.js"
 import { Utils, Logic } from "./logics.js";
