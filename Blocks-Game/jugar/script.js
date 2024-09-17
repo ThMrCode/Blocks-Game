@@ -5,7 +5,7 @@ const ctx = document.getElementById('gameCanvas').getContext('2d');
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
 const sound = new Audio("../resources/sound.mp3"); sound.loop=true;
-const data = newData("../resources/blocks.json");
+var data;   newData("../resources/blocks.json").then(response => data = response);
 
 class Utils {
     static verify_range(num,min,max) {
