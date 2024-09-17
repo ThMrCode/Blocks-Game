@@ -145,7 +145,6 @@ class Game {
             // Actualizar Frame
             this.frame();
             this.counter++; 
-            console.log(this.images);
         } 
     }
     
