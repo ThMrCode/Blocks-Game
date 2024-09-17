@@ -297,10 +297,12 @@ document.addEventListener("keydown", (e)=>{
 });
 
 startButton.addEventListener('click', () => {
+    /*
     sound.play();
     loop = setInterval(() => {
         game.loop();
-    }, speed);
+    }, speed);*/
+    console.log(data);
 });
 resetButton.addEventListener('click', () => {
     clearInterval(loop);
