@@ -34,9 +34,10 @@ class Game {
     }
     frameDead() {
         this.grid_controler.clearAll();
+        this.grid_controler.drawDead(this.score);
     }
     move(key) {
-        if(this.counter != 1) {
+        if(this.counter != 1 && this.life) {
             if(key == "KeyA") {
                 if(this.logic.verify_move_img(this.images[this.images.length-1],-1,0)) {
                     this.logic.move_img(this.images[this.images.length-1],-1,0);
@@ -71,7 +72,7 @@ class Game {
                     this.logic.rotate_img(this.images[this.images.length-1],1);
                 }
             }
-            else if(key == "KeyR") {
+            else if(key == "KeyQ") {
                 if(this.logic.verify_rotate_img(this.images[this.images.length-1],-1)) {
                     this.logic.rotate_img(this.images[this.images.length-1],-1);
                 }
@@ -100,24 +101,25 @@ class Game {
                     this.logic.move_img(this.images[i],0,1);
                 }
                 else if(i == (this.images.length-1)) {
-                    if(this.images[i].y < 4) this.life = false;
+                    if(this.images[i].y < 4) {
+                        this.life = false;
+                        this.counter = 0;
+                    }
                     this.imageStop = true;
                 }
             }
-            game.frame();
+            this.frame();
             this.counter++; 
-        } 
-        else {
-            this.frameDead();
         } 
     }
     
 }
 
-const speed = 200;
+const speed = 50;
 let loop;
 let game;
 
+// Start Variables
 async function start(params) {
     let response = await fetch("../resources/blocks.json");
     let json = await response.json();
@@ -125,14 +127,20 @@ async function start(params) {
     game = new Game(data,ctx);
 }
 start();
+
 // Event Listeners
 document.addEventListener("keydown", (e)=>{
     game.move(e.code);
 });
 startButton.addEventListener('click', () => {
+    game.reset();
     sound.play();
     loop = setInterval(() => {
-        game.loop();
+        if(game.life) game.loop();
+        else {
+            game.frameDead(game.score);
+            clearInterval(loop);
+        }
     }, speed);
 });
 resetButton.addEventListener('click', () => {

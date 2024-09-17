@@ -21,14 +21,15 @@ export class Utils {
 
 export class Logic {
     constructor(data_, grid_controler_) {
+        // Siempre acceder al grid a travez del grid controler, luego del reset se vuelven grids distintos
         this.data = data_;
         this.grid_controler = grid_controler_;
-        this.grid = this.grid_controler.grid;
     }
 
     spawn_img(id) {
         // Spawnea una imagen aleatoria de las opciones en data, (type, rotate, color)
         // La coloca en el grid (Boxs), y tambien retorna esta imagen
+        let grid = this.grid_controler.grid;
         let img_type = Math.floor(Math.random()*this.data.n_type);
         let img_rotate = Math.floor(Math.random()*this.data.n_rotate);
         let img_color = this.data.colors[Math.floor(Math.random()*this.data.n_color)];
@@ -36,17 +37,18 @@ export class Logic {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
                 if(this.data.images[img_type][img_rotate][i][j] == 1) {
-                    this.grid[i][img_x + j] = new Box(id,img_color);
+                    grid[i][img_x + j] = new Box(id,img_color);
                 }
             }
         }
         return new Img(img_x, 0, this.data.images[img_type][img_rotate], id, img_color,img_type,img_rotate);
     }
 
-    static verify_move_img(img, dx, dy) {
+    verify_move_img(img, dx, dy) {
         // Funcion que se encarga de ver si una imagen (solida) puede moverse 
         // (segun limites del mapa y no chocar con otros bloques que lo impidan)
         // Devuelve el valor de si puede moverse o no
+        let grid = this.grid_controler.grid;
         let move = true;
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
@@ -54,7 +56,7 @@ export class Logic {
                     let new_y = img.y + i + dy;
                     let new_x = img.x + j + dx;
                     if(Utils.verify_range(new_x,0,(this.data.grid_w-1)) && Utils.verify_range(new_y,0,(this.data.grid_h-1))) {
-                        if(this.grid[new_y][new_x].id != 0 && this.grid[new_y][new_x].id != img.id) {
+                        if(grid[new_y][new_x].id != 0 && grid[new_y][new_x].id != img.id) {
                             move = false;
                             break;
                         }
@@ -69,8 +71,9 @@ export class Logic {
         return move;
     }
 
-    static move_img(img, dx, dy) {
+    move_img(img, dx, dy) {
         // Funcion que mueve una imagen (su x, y) y tambien sus Boxs en el grid
+        let grid = this.grid_controler.grid;
         let pots = [];
         let pots_delete = [];
         for (let i = 0; i < 4; i++) {
@@ -84,7 +87,7 @@ export class Logic {
             for (let j = 0; j < 4; j++) {
                 if(img.shape[i][j] == 1) {
                     let pot = {y: (img.y + i),x: (img.x + j)};
-                    let index = this.index(pot,pots);
+                    let index = Utils.index(pot,pots);
                     if(index == -1) {
                         pots_delete.push(pot);
                     }
@@ -92,18 +95,21 @@ export class Logic {
             }
         }
         for (let i = 0; i < pots.length; i++) {
-            this.grid[pots[i].y][pots[i].x] = new Box(img.id,img.color);
+            grid[pots[i].y][pots[i].x] = new Box(img.id,img.color);
         }
         for (let i = 0; i < pots_delete.length; i++) {
-            this.grid[pots_delete[i].y][pots_delete[i].x] = new Box(0,this.data.bg_color);
+            grid[pots_delete[i].y][pots_delete[i].x] = new Box(0,this.data.bg_color);
         }
         img.x = img.x + dx;
         img.y = img.y + dy;
     }
 
-    static verify_rotate_img(img, rotate) {
+    verify_rotate_img(img, rotate) {
         // Funcion que verifica si una imagen puede rotar
-        let new_rotate = (img.rotate + rotate) % this.data.n_rotate;
+        let grid = this.grid_controler.grid;
+        let new_rotate = (img.rotate + rotate); 
+        if(new_rotate == this.data.n_rotate) new_rotate = 0;
+        else if(new_rotate < 0) new_rotate = (this.data.n_rotate - 1);
         let new_shape = this.data.images[img.type][new_rotate];
         let move = true;
         for (let i = 0; i < 4; i++) {
@@ -112,7 +118,7 @@ export class Logic {
                     let new_y = img.y + i;
                     let new_x = img.x + j;
                     if(Utils.verify_range(new_x,0,(this.data.grid_w-1)) && Utils.verify_range(new_y,0,(this.data.grid_h-1))) {
-                        if(this.grid[new_y][new_x].id != 0 && this.grid[new_y][new_x].id != img.id) {
+                        if(grid[new_y][new_x].id != 0 && grid[new_y][new_x].id != img.id) {
                             move = false;
                             break;
                         }
@@ -127,9 +133,12 @@ export class Logic {
         return move;
     }
 
-    static rotate_img(img, rotate) {
+    rotate_img(img, rotate) {
         // Funcion que rota la imagen (su shape) y sus Boxs en la grid
-        let new_rotate = (img.rotate + rotate) % this.data.n_rotate;
+        let grid = this.grid_controler.grid;
+        let new_rotate = (img.rotate + rotate); 
+        if(new_rotate == this.data.n_rotate) new_rotate = 0;
+        else if(new_rotate < 0) new_rotate = (this.data.n_rotate - 1);
         let new_shape = this.data.images[img.type][new_rotate];
         let pots = [];
         let pots_delete = [];
@@ -144,7 +153,7 @@ export class Logic {
             for (let j = 0; j < 4; j++) {
                 if(img.shape[i][j] == 1) {
                     let pot = {y: (img.y + i),x: (img.x + j)};
-                    let index = this.index(pot,pots);
+                    let index = Utils.index(pot,pots);
                     if(index == -1) {
                         pots_delete.push(pot);
                     }
@@ -152,40 +161,43 @@ export class Logic {
             }
         }
         for (let i = 0; i < pots.length; i++) {
-            this.grid[pots[i].y][pots[i].x] = new Box(img.id,img.color);
+            grid[pots[i].y][pots[i].x] = new Box(img.id,img.color);
         }
         for (let i = 0; i < pots_delete.length; i++) {
-            this.grid[pots_delete[i].y][pots_delete[i].x] = new Box(0,this.data.bg_color);
+            grid[pots_delete[i].y][pots_delete[i].x] = new Box(0,this.data.bg_color);
         }
         img.rotate = new_rotate;
         img.shape = new_shape;
     }
 
-    static move_sands() {
+    move_sands() {
+        let grid = this.grid_controler.grid;
         for (let i = (this.data.grid_h-2); i >= 0; i--) {
             for (let j = 0; j < this.data.grid_w; j++) {
-                if(this.grid[i][j].id != 0 && this.grid[i][j].sand && this.grid[i+1][j].id == 0) {
-                    this.grid[i+1][j] = this.grid[i][j];
-                    this.grid[i][j] = new Box(0,this.data.bg_color);
+                if(grid[i][j].id != 0 && grid[i][j].sand && grid[i+1][j].id == 0) {
+                    grid[i+1][j] = grid[i][j];
+                    grid[i][j] = new Box(0,this.data.bg_color);
                 }
             }
         }
     }
 
-    static pop_row(i) {
+    pop_row(i) {
+        let grid = this.grid_controler.grid;
         for (let j = 0; j < this.data.grid_w; j++) {
             // Actualizar id sans de todos los cuadrados y de las imagenes
-            this.grid[i][j].id
-            this.grid[i][j] = new Box(0,this.data.bg_color);
+            grid[i][j].id
+            grid[i][j] = new Box(0,this.data.bg_color);
         }
     }
 
-    static verify_row() {
+    verify_row() {
+        let grid = this.grid_controler.grid;
         let same_color = true;
         for (let i = (this.data.grid_h-1); i >= 0; i--) {
             for (let j = 0; j < this.data.grid_w; j++) {
-                if(this.grid[i][j].id != 0) {
-                    this.draw(i,j,this.grid[i][j].color);
+                if(grid[i][j].id != 0) {
+                    this.draw(i,j,grid[i][j].color);
                 }
             }
         }

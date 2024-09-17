@@ -57,12 +57,8 @@ export class Grid {
         }
     }
     clearAll() {
-        // Empieza desde 4 pues los Boxs i 0 -> 3 no se ven
-        for (let i = 4; i < this.data.grid_h; i++) {
-            for (let j = 0; j < this.data.grid_w; j++) {
-                this.clear(i,j);
-            }
-        }
+        this.ctx.fillStyle = this.data.bg_color;
+        this.ctx.fillRect(0, 0, this.data.w, this.data.h);
     }
     drawClearAll() {
         // Empieza desde 4 pues los Boxs i 0 -> 3 no se ven
@@ -72,4 +68,18 @@ export class Grid {
             }
         }
     }
+    drawDead(score) {
+        let centerX = this.data.w / 2;
+        let centerY = this.data.h / 2;
+        this.ctx.fillStyle = '#FF0000'; 
+        this.ctx.font = 'bold 40px "Press Start 2P", monospace'; 
+        this.ctx.textAlign = 'center'; 
+        this.ctx.textBaseline = 'middle'; 
+        // Dibujar el texto "GAME OVER" en el centro
+        this.ctx.fillText("GAME OVER", centerX, centerY - 20); 
+        // Agregar subtítulo "Tu Score: "
+        this.ctx.font = '20px "Press Start 2P", monospace';
+        this.ctx.fillText("Tu Score: " + score, centerX, centerY + 30);
+    }
+
 }
